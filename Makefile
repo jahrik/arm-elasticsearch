@@ -1,11 +1,12 @@
+.EXPORT_ALL_VARIABLES:
 IMAGE = "jahrik/arm-elasticsearch"
-TAG := $(shell uname -m)
+TAG = latest
 STACK = "elk"
 
 all: build
 
 build:
-	@docker build -t ${IMAGE}:$(TAG) -f Dockerfile_${TAG} .
+	@docker build -t ${IMAGE}:$(TAG) .
 
 push:
 	@docker push ${IMAGE}:$(TAG)
