@@ -1,99 +1,24 @@
-version: '3.5'
-
+---
 services:
-
-  es_venus:
-    image: jahrik/arm-elasticsearch:armv7l
-    volumes:
-      - /data:/var/lib/elasticsearch:rw
-      - /etc/elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
-      - /etc/elasticsearch/jvm.options:/etc/elasticsearch/jvm.options
-    environment:
-      - xpack.security.enabled=false
-    networks:
-      - elk
-    deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.labels.arch == arm32v7
-          - node.hostname == venus
-      resources:
-        limits:
-          cpus: '6'
-          memory: 1.5G
-        reservations:
-          cpus: '4'
-          memory: 1.28G
-
-  es_ninja:
-    image: jahrik/arm-elasticsearch:armv7l
+  elasticsearch:
+    image: jahrik/arm-elasticsearch:latest
     ports:
       - "9200:9200"
-    volumes:
-      - /data:/var/lib/elasticsearch:rw
-      - /etc/elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
-      - /etc/elasticsearch/jvm.options:/etc/elasticsearch/jvm.options
     environment:
+      - discovery.type=single-node
       - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - /data:/usr/share/elasticsearch/data:rw
     networks:
       - elk
     deploy:
-      placement:
-        constraints:
-          - node.labels.arch == arm32v7
-          - node.hostname == ninja
       resources:
         limits:
-          cpus: '6'
           memory: 1.5G
-        reservations:
-          cpus: '4'
-          memory: 1.28G
-
-  es_oroku:
-    image: jahrik/arm-elasticsearch:armv7l
-    volumes:
-      - /data:/var/lib/elasticsearch:rw
-      - /etc/elasticsearch/elasticsearch.yml:/etc/elasticsearch/elasticsearch.yml
-      - /etc/elasticsearch/jvm.options:/etc/elasticsearch/jvm.options
-    environment:
-      - xpack.security.enabled=false
-    networks:
-      - elk
-    deploy:
-      placement:
-        constraints:
-          - node.labels.arch == arm32v7
-          - node.hostname == oroku
-      resources:
-        limits:
-          cpus: '6'
-          memory: 1.5G
-        reservations:
-          cpus: '4'
-          memory: 1.28G
-
-#   es_leona:
-#     image: jahrik/arm-elasticsearch:x86_64
-#     ports:
-#       - "9200:9200"
-#     environment:
-#       # - bootstrap.memory_lock=true
-#       - xpack.security.enabled=false
-#     volumes:
-#       - /data:/usr/share/elasticsearch/data:rw
-#       - /etc/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-#       - /etc/elasticsearch/jvm.options:/usr/share/elasticsearch/config/jvm.options
-#     networks:
-#       - elk
-#     deploy:
-#       placement:
-#         constraints:
-#           - node.labels.arch == x86_64
-#           - node.hostname == leona
 
 networks:
   elk:
     name: elk
     driver: overlay
+    external: true
