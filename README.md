@@ -21,14 +21,14 @@ Needs `vm.max_map_count >= 262144` on the host: `sudo sysctl -w vm.max_map_count
 
 ```bash
 docker network create -d overlay elk   # once
-make deploy                            # data persists to /data on the node
+just deploy                            # data persists to /data on the node
 ```
 
 ## Build
 
 ```bash
-make build
-make push
+just build
+just push
 ```
 
 CI: PR builds + cluster-health check; merge to main pushes multi-arch (amd64/arm64) to Docker Hub. No armv7: modern Elasticsearch is 64-bit only (and needs more RAM than a Pi 3 has).
