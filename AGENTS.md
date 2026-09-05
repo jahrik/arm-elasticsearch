@@ -5,9 +5,9 @@ Multi-arch Elasticsearch image: pinned `FROM` over the official `elasticsearch` 
 ## Commands
 
 ```bash
-make build                                        # build jahrik/arm-elasticsearch:latest
+just build                                        # build jahrik/arm-elasticsearch:latest
 curl -fsS http://localhost:9200/_cluster/health   # smoke test a running container
-make deploy                                       # swarm stack deploy (stack: elk)
+just deploy                                       # swarm stack deploy (stack: elk)
 ```
 
 ## CI
